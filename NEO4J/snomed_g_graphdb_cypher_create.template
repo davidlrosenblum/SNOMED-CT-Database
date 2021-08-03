@@ -11,18 +11,18 @@
 
 // NEXT STEP -- create INDEXES
 
-CREATE CONSTRAINT ON (c:ObjectConcept) ASSERT c.id IS UNIQUE;
-CREATE CONSTRAINT ON (c:ObjectConcept) ASSERT c.sctid IS UNIQUE;
+CREATE CONSTRAINT nk_objectconcept_id IF NOT EXISTS ON (c:ObjectConcept) ASSERT (c.id) IS NODE KEY;
+CREATE CONSTRAINT nk_objectconcept_sctid IF NOT EXISTS ON (c:ObjectConcept) ASSERT (c.sctid) IS NODE KEY;
   // id,sctid index created, requiring uniqueness
   // Note: Can't have "FSN is UNIQUE"" constraint, can have dups (inactive concepts)
   //       for example -- "retired procedure" is FSN of multiple inactive concepts
-CREATE CONSTRAINT ON (c:Description) ASSERT c.id IS UNIQUE;
-CREATE INDEX ON :Description(sctid);
+CREATE CONSTRAINT  nk_description_id IF NOT EXISTS ON (c:Description) ASSERT (c.id) IS NODE KEY;
+CREATE INDEX idx_description_sctid IF NOT EXISTS FOR (n:Description) ON (n.sctid);
   // need index so setting HAS_DESCRIPTION edges doesn't stall
   // there can be more than one description for the same sctid, sctid not unique, but id is unique
 
 // ROLE_GROUP nodes.  Index needed for defining relationship assignment.
-CREATE INDEX ON :RoleGroup(sctid);
+CREATE INDEX idx_description_sctid IF NOT EXISTS FOR (n:RoleGroup) ON (n.sctid);
 
 // NEXT STEP -- create CONCEPT nodes
 
@@ -114,4 +114,3 @@ MERGE (c)-[:HAS_ROLE_GROUP]->(rg);
 // --------------------------------------------------------------------------------------
 // NEXT STEP -- create Defining relationships
 // --------------------------------------------------------------------------------------
-

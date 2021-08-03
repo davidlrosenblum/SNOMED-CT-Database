@@ -5,3 +5,5 @@ tmp*
 .DS_Store
 *.zip
 .vscode/settings.json
+NEO4J4x/
+NEO4J/temp
